@@ -36,7 +36,7 @@ def getAnnunci(anchors):
    return link_annunci
 
 def getFilePath(product):
-  return 'out/%s.txt' % product
+  return '../out/%s.txt' % product
 
 def readFileAnnunci(fpath):
    return [
