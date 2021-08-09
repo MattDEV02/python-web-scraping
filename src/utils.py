@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import webbrowser as broswer
 import requests as req
 import datetime
-from os import remove
+from os import remove, mkdir
 from glob import glob
 from sys import argv
 
@@ -72,11 +72,12 @@ def getFilePath(product):
 
 def getFile(fpath):
    f = None
+   mode = 'a+'
    try:
-      f = open(fpath, 'a+')
+      f = open(fpath, mode)
    except FileNotFoundError:
-      print('File %s not found.' % fpath)
-      exit()
+      mkdir('../out')
+      f = open(fpath, mode)
    return f
 
 def readFileAnnunci(fpath):
