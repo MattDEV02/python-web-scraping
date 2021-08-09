@@ -1,37 +1,44 @@
 from utils import *
-    
+from winsound import Beep
+from notify_run import Notify
+
+
+notify = Notify(endpoint = ENDPOINT)
+checkCond()
+product = input('Product:  ')
+print('Started at %s' % now())
 
 while True:
-    product = input('Product: ')
-    if product == '0':
-        break
-    url = getURL(product)
+   URL = getURL(product)
+   html = makeReq(URL)
+   anchors = scraping(html)
+   link_annunci = getAnnunci(anchors)
 
-    html = makeReq(url)
-    anchors = scraping(html)
-    link_annunci = getAnnunci(anchors)
-    num_annunci = len(link_annunci)
-
-    if num_annunci > 0:
-        fpath = getFilePath(product)
-        f = open(fpath, 'a')
-        old_link_annunci = readFileAnnunci(fpath)
-        new_link_annunci = []
-        for link_annuncio in link_annunci:
+   if len(link_annunci) > 0:
+      fpath = getFilePath(product)
+      f = getFile(fpath)
+      if f:
+         old_link_annunci = readFileAnnunci(fpath)
+         new_link_annunci = []
+         for link_annuncio in link_annunci:
             if link_annuncio not in old_link_annunci:
-                new_link_annunci.append(link_annuncio)
-                f.write('%s\n' % link_annuncio)
-        f.close()
-
-        if(new_link_annunci):
-            print('New Results!! Opening...')
+               new_link_annunci.append(link_annuncio)
+               f.write('%s\n' % link_annuncio)
+               print('%s writed to %s' % (link_annuncio, fpath))
+         f.close()
+         if new_link_annunci:
+            num_annunci = str(len(new_link_annunci))
+            print('New Results!! opening %s annunci...' % num_annunci)
+            Beep(2500, 350)
+            msg = '%s nuovi annunci per il prodotto %s !' % (num_annunci, product)
+            notify.send(msg, new_link_annunci[-1])
             openLinks(new_link_annunci)
-        else:
+         else:
             print('There are not new Results.')
+      else:
+         print('File not valid.')
+         break
+   else:
+      print('Zero Results.')
 
-    else:
-        print('Zero Results')
-
-
-print('Finish.')
 
