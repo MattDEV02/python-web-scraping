@@ -1,6 +1,7 @@
 from utils import *
 from winsound import Beep
 from notify_run import Notify
+from path import path
 
 
 notify = Notify(endpoint = ENDPOINT)
@@ -24,7 +25,7 @@ while True:
             if link_annuncio not in old_link_annunci:
                new_link_annunci.append(link_annuncio)
                f.write('%s\n' % link_annuncio)
-               print('%s writed to %s' % (link_annuncio, fpath))
+               print('%s writed to %s' % (link_annuncio, path(fpath).abspath()))
          f.close()
          if new_link_annunci:
             num_annunci = str(len(new_link_annunci))
