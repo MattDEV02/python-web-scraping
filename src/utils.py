@@ -5,6 +5,8 @@ import datetime
 from os import remove, mkdir
 from glob import glob
 from sys import argv
+from path import Path
+
 
 
 baseUrl = 'https://www.subito.it/'
@@ -38,6 +40,9 @@ def checkCond():
 
 def now():
    return str(datetime.datetime.now())
+
+def absPath(fpath):
+    return Path(fpath).abspath()
 
 def getURL(product):
    URL = (
@@ -81,7 +86,7 @@ def getFile(fpath):
    return f
 
 def readFileAnnunci(fpath):
-   print('Cheching old annunci in %s ...' % fpath)
+   print('Cheching old annunci in %s ...' % absPath(fpath))
    return [
       row.rstrip('\n')
       for row in open(fpath)
